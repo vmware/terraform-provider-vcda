@@ -1,0 +1,43 @@
+package vcda
+
+const (
+	VcdaAuthTokenHeader = "X-VCAV-Auth"
+	ContentTypeHeader   = "Content-Type"
+	ConfigSecretHeader  = "Config-Secret"
+	AcceptHeader        = "Accept"
+
+	ContentTypeHeaderValue = "application/json"
+	AcceptHeaderValue      = "application/vnd.vmware.h4-v4.5+json;charset=UTF-8"
+	UserType               = "localUser"
+
+	ManagerCertExtraConfigKey    = "guestinfo.manager.certificate"
+	CloudCertExtraConfigKey      = "guestinfo.cloud.certificate"
+	TunnelCertExtraConfigKey     = "guestinfo.tunnel.certificate"
+	ReplicatorCertExtraConfigKey = "guestinfo.replicator.certificate"
+
+	VcdaIP                    = "VCDA_IP"
+	LocalUser                 = "LOCAL_USER"
+	LocalPassword             = "LOCAL_PASSWORD"
+	VsphereUser               = "VSPHERE_USER"
+	VspherePassword           = "VSPHERE_PASSWORD"
+	VsphereServer             = "VSPHERE_SERVER"
+	VsphereAllowUnverifiedSSL = "VSPHERE_ALLOW_UNVERIFIED_SSL"
+	DatacenterID              = "DC_ID"
+	CloudVmName               = "CLOUD_VM_NAME"
+	ManagerVmName             = "MANAGER_VM_NAME"
+	TunnelVmName              = "TUNNEL_VM_NAME"
+	RootPassword              = "ROOT_PASSWORD"
+	NewPassword               = "NEW_PASSWORD"
+	LicenseKey                = "LICENSE_KEY"
+	VcloudDirectorUsername    = "VCD_USERNAME"
+	VcloudDirectorPassword    = "VCD_PASSWORD"
+	VcloudDirectorURL         = "VCD_URL"
+	VcloudDirectorAddress     = "VCD_ADDRESS"
+	LookupServiceURL          = "LS_URL"
+	LookupServiceAddress      = "LS_ADDRESS"
+	ReplicatorAddress         = "REPLICATOR_ADDRESS"
+	ReplicatorURL             = "REPLICATOR_URL"
+	SsoUser                   = "SSO_USER"
+	SsoPassword               = "SSO_PASSWORD"
+	TunnelURL                 = "TUNNEL_URL"
+)

@@ -1,4 +1,7 @@
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
+terraform-provider-for-vmware-cloud-director-availability
+.terraform/
+terraform.tfstate
+.terraform.lock.hcl
+*.backup
+.idea/
+.DS_Store
