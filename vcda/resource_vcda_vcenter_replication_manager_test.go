@@ -10,20 +10,29 @@ import (
 	"testing"
 )
 
-func TestAccVcdaVcenterReplicationManager_basic(t *testing.T) {
+func (at *AccTests) TestAccVcdaVcenterReplicationManager_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {
 			testAccPreCheck(t)
+			testAccVcdaAppliancePasswordPreCheck(t)
 			testAccVcdaVcenterReplicationManagerPreCheck(t)
 		},
 		ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			{
+				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(ManagerVmName), "manager", os.Getenv(ManagerAddress)),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("vcda_appliance_password.appliance_password", "root_password_expired", "false"),
+					resource.TestCheckResourceAttrSet("vcda_appliance_password.appliance_password", "seconds_until_expiration"),
+				),
+			},
+			{
 				Config: testAccVcdaVcenterReplicationManagerConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "is_licensed", "true"),
 					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "expiration_date", "0"),
-					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "ls_url", os.Getenv(LookupServiceURL)),
+					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site",
+						"ls_url", "https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk"),
 
 					resource.TestCheckResourceAttrSet("vcda_vcenter_replication_manager.manager_site", "ls_thumbprint"),
 					resource.TestCheckResourceAttrSet("vcda_vcenter_replication_manager.manager_site", "tunnel_url"),
@@ -35,17 +44,18 @@ func TestAccVcdaVcenterReplicationManager_basic(t *testing.T) {
 }
 
 func testAccVcdaVcenterReplicationManagerPreCheck(t *testing.T) {
-	if v := os.Getenv(ManagerVmName); v == "" {
-		t.Fatal(ManagerVmName + " must be set for vcda_vcenter_replication_manager acceptance tests")
+	if v := os.Getenv(ManagerAddress); v == "" {
+		t.Fatal(ManagerAddress + " must be set for vcda_vcenter_replication_manager acceptance tests")
+	}
+	err := os.Setenv(VcdaIP, os.Getenv(ManagerAddress))
+	if err != nil {
+		t.Fatal("error setting" + VcdaIP + " to " + ManagerAddress + " for vcda_vcenter_replication_manager acceptance tests")
 	}
 	if os.Getenv(LookupServiceAddress) == "" {
 		t.Fatal(LookupServiceAddress + " must be set for vcda_vcenter_replication_manager acceptance tests")
 	}
 	if os.Getenv(LicenseKey) == "" {
 		t.Fatal(LicenseKey + " must be set for vcda_vcenter_replication_manager acceptance tests")
-	}
-	if os.Getenv(LookupServiceURL) == "" {
-		t.Fatal(LookupServiceURL + " must be set for vcda_vcenter_replication_manager acceptance tests")
 	}
 	if os.Getenv(SsoUser) == "" {
 		t.Fatal(SsoUser + " must be set for vcda_vcenter_replication_manager acceptance tests")
@@ -73,7 +83,7 @@ resource "vcda_vcenter_replication_manager" "manager_site" {
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 
   license_key        = %q
-  site_name          = "psvet-manager-site1"
+  site_name          = "manager-site1"
   lookup_service_url = %q
   sso_user           = %q
   sso_password       = %q
@@ -83,7 +93,7 @@ resource "vcda_vcenter_replication_manager" "manager_site" {
 		os.Getenv(ManagerVmName),
 		os.Getenv(LookupServiceAddress),
 		os.Getenv(LicenseKey),
-		os.Getenv(LookupServiceURL),
+		"https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk",
 		os.Getenv(SsoUser),
 		os.Getenv(SsoPassword),
 	)

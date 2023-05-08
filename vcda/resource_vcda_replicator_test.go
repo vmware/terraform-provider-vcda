@@ -10,19 +10,28 @@ import (
 	"testing"
 )
 
-func TestAccVcdaReplicator_basic(t *testing.T) {
+func (at *AccTests) TestAccVcdaReplicator_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {
 			testAccPreCheck(t)
+			testAccVcdaAppliancePasswordPreCheck(t)
 			testAccVcdaReplicatorPreCheck(t)
 		},
 		ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			{
+				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(ReplicatorVmName), "replicator", os.Getenv(ReplicatorAddress)),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("vcda_appliance_password.appliance_password", "root_password_expired", "false"),
+					resource.TestCheckResourceAttrSet("vcda_appliance_password.appliance_password", "seconds_until_expiration"),
+				),
+			},
+			{
 				Config: testAccVcdaReplicatorConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_replicator.add_replicator", "is_in_maintenance_mode", "false"),
-					resource.TestCheckResourceAttr("vcda_replicator.add_replicator", "replicator_ls_url", os.Getenv(LookupServiceURL)),
+					resource.TestCheckResourceAttr("vcda_replicator.add_replicator",
+						"replicator_ls_url", "https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk"),
 
 					resource.TestCheckResourceAttrSet("vcda_replicator.add_replicator", "data_address"),
 					resource.TestCheckResourceAttrSet("vcda_replicator.add_replicator", "build_version"),
@@ -34,6 +43,16 @@ func TestAccVcdaReplicator_basic(t *testing.T) {
 }
 
 func testAccVcdaReplicatorPreCheck(t *testing.T) {
+	if v := os.Getenv(ManagerAddress); v == "" {
+		t.Fatal(ManagerAddress + " must be set for vcda_replicator acceptance tests")
+	}
+	err := os.Setenv(VcdaIP, os.Getenv(ManagerAddress))
+	if err != nil {
+		t.Fatal("error setting" + VcdaIP + " to " + ManagerAddress + " for vcda_replicator acceptance tests")
+	}
+	if v := os.Getenv(ReplicatorVmName); v == "" {
+		t.Fatal(ReplicatorVmName + " must be set for vcda_replicator acceptance tests")
+	}
 	if v := os.Getenv(ManagerVmName); v == "" {
 		t.Fatal(ManagerVmName + " must be set for vcda_replicator acceptance tests")
 	}
@@ -42,12 +61,6 @@ func testAccVcdaReplicatorPreCheck(t *testing.T) {
 	}
 	if os.Getenv(ReplicatorAddress) == "" {
 		t.Fatal(ReplicatorAddress + " must be set for vcda_replicator acceptance tests")
-	}
-	if os.Getenv(LookupServiceURL) == "" {
-		t.Fatal(LookupServiceURL + " must be set for vcda_replicator acceptance tests")
-	}
-	if os.Getenv(ReplicatorURL) == "" {
-		t.Fatal(ReplicatorURL + " must be set for vcda_replicator acceptance tests")
 	}
 	if os.Getenv(SsoUser) == "" {
 		t.Fatal(SsoUser + " must be set for vcda_replicator acceptance tests")
@@ -91,7 +104,7 @@ resource "vcda_replicator" "add_replicator" {
   sso_password       = %q
   root_password      = %q
   owner              = "*"
-  site_name          = "psvet-manager-site1"
+  site_name          = "manager-site1"
 
   api_thumbprint            = data.vcda_remote_services_thumbprint.replicator_thumbprint.id
   service_cert              = data.vcda_service_cert.manager_service_cert.service_cert
@@ -102,8 +115,8 @@ resource "vcda_replicator" "add_replicator" {
 		os.Getenv(ManagerVmName),
 		os.Getenv(LookupServiceAddress),
 		os.Getenv(ReplicatorAddress),
-		os.Getenv(LookupServiceURL),
-		os.Getenv(ReplicatorURL),
+		"https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk",
+		"https://"+os.Getenv(ReplicatorAddress)+":8043",
 		os.Getenv(SsoUser),
 		os.Getenv(SsoPassword),
 		os.Getenv(RootPassword),

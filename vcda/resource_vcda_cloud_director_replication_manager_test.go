@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAccVcdaCloudDirectorReplicationManager_basic(t *testing.T) {
+func (at *AccTests) TestAccVcdaCloudDirectorReplicationManager_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {
 			testAccPreCheck(t)
@@ -24,8 +24,10 @@ func TestAccVcdaCloudDirectorReplicationManager_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site", "is_licensed", "true"),
 					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site", "expiration_date", "0"),
 					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site", "is_combined", "false"),
-					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site", "ls_url", os.Getenv(LookupServiceURL)),
-					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site", "vcloud_url", os.Getenv(VcloudDirectorURL)+"/api"),
+					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site",
+						"ls_url", "https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk"),
+					resource.TestCheckResourceAttr("vcda_cloud_director_replication_manager.cloud_site",
+						"vcloud_url", "https://"+os.Getenv(VcloudDirectorAddress)+"/api"),
 
 					resource.TestCheckResourceAttrSet("vcda_cloud_director_replication_manager.cloud_site", "ls_thumbprint"),
 					resource.TestCheckResourceAttrSet("vcda_cloud_director_replication_manager.cloud_site", "local_site"),
@@ -65,12 +67,6 @@ func testAccVcdaCloudDirectorReplicationManagerPreCheck(t *testing.T) {
 	if os.Getenv(VcloudDirectorPassword) == "" {
 		t.Fatal(VcloudDirectorPassword + " must be set for vcda_cloud_director_replication_manager acceptance tests")
 	}
-	if os.Getenv(VcloudDirectorURL) == "" {
-		t.Fatal(VcloudDirectorURL + " must be set for vcda_cloud_director_replication_manager acceptance tests")
-	}
-	if os.Getenv(LookupServiceURL) == "" {
-		t.Fatal(LookupServiceURL + " must be set for vcda_cloud_director_replication_manager acceptance tests")
-	}
 }
 
 func testAccVcdaCloudDirectorReplicationManagerConfigBasic() string {
@@ -97,10 +93,10 @@ resource "vcda_cloud_director_replication_manager" "cloud_site" {
   vcd_thumbprint            = data.vcda_remote_services_thumbprint.vcd_thumbprint.id
 
   license_key      = %q
-  site_name        = "psvet-cloud-site1"
+  site_name        = "cloud-site1"
   site_description = "cloud site"
 
-  public_endpoint_address = "vcda.psvet.pub"
+  public_endpoint_address = "vcda.pub"
   public_endpoint_port    = 443
 
   vcd_username = %q
@@ -117,7 +113,7 @@ resource "vcda_cloud_director_replication_manager" "cloud_site" {
 		os.Getenv(LicenseKey),
 		os.Getenv(VcloudDirectorUsername),
 		os.Getenv(VcloudDirectorPassword),
-		os.Getenv(VcloudDirectorURL),
-		os.Getenv(LookupServiceURL),
+		"https://"+os.Getenv(VcloudDirectorAddress),
+		"https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk",
 	)
 }

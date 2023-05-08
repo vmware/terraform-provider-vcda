@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAccVcdaAppliancePassword_basic(t *testing.T) {
+func (at *AccTests) TestAccVcdaAppliancePassword_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {
 			testAccPreCheck(t)
@@ -19,7 +19,7 @@ func TestAccVcdaAppliancePassword_basic(t *testing.T) {
 		ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccVcdaAppliancePasswordConfigBasic(),
+				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(CloudVmName), "cloud", os.Getenv(VcdaIP)),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_appliance_password.appliance_password", "root_password_expired", "false"),
 					resource.TestCheckResourceAttrSet("vcda_appliance_password.appliance_password", "seconds_until_expiration"),
@@ -30,23 +30,20 @@ func TestAccVcdaAppliancePassword_basic(t *testing.T) {
 }
 
 func testAccVcdaAppliancePasswordPreCheck(t *testing.T) {
-	if v := os.Getenv(CloudVmName); v == "" {
-		t.Fatal(CloudVmName + " must be set for vcda_appliance_password acceptance tests")
-	}
-	if os.Getenv(RootPassword) == "" {
-		t.Fatal(RootPassword + " must be set for vcda_appliance_password acceptance tests")
+	if os.Getenv(CurrentPassword) == "" {
+		t.Fatal(CurrentPassword + " must be set for vcda_appliance_password acceptance tests")
 	}
 	if os.Getenv(NewPassword) == "" {
 		t.Fatal(NewPassword + " must be set for vcda_appliance_password acceptance tests")
 	}
 }
 
-func testAccVcdaAppliancePasswordConfigBasic() string {
+func testAccVcdaAppliancePasswordConfigBasic(vmName string, applianceType string, applianceIP string) string {
 	return fmt.Sprintf(`
 data "vcda_service_cert" "service_cert" {
   datacenter_id = %q
   name          = %q
-  type          = "cloud"
+  type          = %q
 }
 
 resource "vcda_appliance_password" "appliance_password" {
@@ -57,9 +54,10 @@ resource "vcda_appliance_password" "appliance_password" {
 }
 `,
 		os.Getenv(DatacenterID),
-		os.Getenv(CloudVmName),
-		os.Getenv(RootPassword),
+		vmName,
+		applianceType,
+		os.Getenv(CurrentPassword),
 		os.Getenv(NewPassword),
-		os.Getenv(VcdaIP),
+		applianceIP,
 	)
 }

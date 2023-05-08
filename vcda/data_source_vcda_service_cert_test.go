@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAccVcdaDataSourceServiceCert_basic(t *testing.T) {
+func (at *AccTests) TestAccVcdaDataSourceServiceCert_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:          func() { testAccPreCheck(t) },
 		ProviderFactories: testProviders(),

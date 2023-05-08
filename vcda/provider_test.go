@@ -21,13 +21,13 @@ func init() {
 	}
 }
 
-func TestProvider(t *testing.T) {
+func (at *AccTests) TestProvider(t *testing.T) {
 	if err := Provider().InternalValidate(); err != nil {
 		t.Fatalf("err: %s", err)
 	}
 }
 
-func TestProvider_impl(t *testing.T) {
+func (at *AccTests) TestProvider_impl(t *testing.T) {
 	var _ = Provider()
 }
 
@@ -59,4 +59,33 @@ func testAccPreCheck(t *testing.T) {
 	if v := os.Getenv(DatacenterID); v == "" {
 		t.Fatal(DatacenterID + " must be set for acceptance tests")
 	}
+}
+
+type AccTests struct{ Test *testing.T }
+
+func TestRunner(t *testing.T) {
+	t.Run("provider", func(t *testing.T) {
+		test := AccTests{Test: t}
+		test.TestProvider(t)
+		test.TestProvider_impl(t)
+	})
+
+	t.Run("cloud", func(t *testing.T) {
+		test := AccTests{Test: t}
+		test.TestAccVcdaAppliancePassword_basic(t)
+		test.TestAccVcdaCloudDirectorReplicationManager_basic(t)
+		test.TestAccVcdaTunnel_basic(t)
+	})
+
+	t.Run("manager", func(t *testing.T) {
+		test := AccTests{Test: t}
+		test.TestAccVcdaVcenterReplicationManager_basic(t)
+		test.TestAccVcdaReplicator_basic(t)
+	})
+
+	t.Run("datasource", func(t *testing.T) {
+		test := AccTests{Test: t}
+		test.TestAccVcdaDataSourceRemoteServicesThumbprint_basic(t)
+		test.TestAccVcdaDataSourceServiceCert_basic(t)
+	})
 }
