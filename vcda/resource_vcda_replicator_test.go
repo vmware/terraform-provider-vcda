@@ -107,7 +107,7 @@ resource "vcda_replicator" "add_replicator" {
   site_name          = "manager-site1"
 
   api_thumbprint            = data.vcda_remote_services_thumbprint.replicator_thumbprint.id
-  service_cert              = data.vcda_service_cert.manager_service_cert.service_cert
+  service_cert              = data.vcda_service_cert.manager_service_cert.id
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 }
 `,

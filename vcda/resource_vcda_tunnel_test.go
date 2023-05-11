@@ -73,11 +73,11 @@ data "vcda_service_cert" "tunnel_service_cert" {
 }
 
 resource "vcda_tunnel" "add_tunnel" {
-  service_cert = data.vcda_service_cert.cloud_service_cert.service_cert
+  service_cert = data.vcda_service_cert.cloud_service_cert.id
 
   url           = %q
   root_password = %q
-  certificate   = data.vcda_service_cert.tunnel_service_cert.service_cert
+  certificate   = data.vcda_service_cert.tunnel_service_cert.id
 }
 `,
 		os.Getenv(DatacenterID),

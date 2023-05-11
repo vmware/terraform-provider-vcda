@@ -79,7 +79,7 @@ data "vcda_remote_services_thumbprint" "ls_thumbprint" {
 }
 
 resource "vcda_vcenter_replication_manager" "manager_site" {
-  service_cert              = data.vcda_service_cert.manager_service_cert.service_cert
+  service_cert              = data.vcda_service_cert.manager_service_cert.id
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 
   license_key        = %q

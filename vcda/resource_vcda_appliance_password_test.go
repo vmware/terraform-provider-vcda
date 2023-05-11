@@ -50,7 +50,7 @@ resource "vcda_appliance_password" "appliance_password" {
   current_password = %q
   new_password     = %q
   appliance_ip     = %q
-  service_cert     = data.vcda_service_cert.service_cert.service_cert
+  service_cert     = data.vcda_service_cert.service_cert.id
 }
 `,
 		os.Getenv(DatacenterID),

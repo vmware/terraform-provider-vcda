@@ -18,7 +18,7 @@ func (at *AccTests) TestAccVcdaDataSourceServiceCert_basic(t *testing.T) {
 			{
 				Config: testAccVcdaServiceCertConfigBasic(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttrSet("data.vcda_service_cert.service_cert", "service_cert"),
+					resource.TestCheckResourceAttrSet("data.vcda_service_cert.service_cert", "id"),
 				),
 			},
 		},

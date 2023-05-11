@@ -26,7 +26,7 @@ data "vcda_service_cert" "manager_service_cert" {
 }
 
 output "vcda_manager_service_cert" {
-  value = data.vcda_service_cert.manager_service_cert.service_cert
+  value = data.vcda_service_cert.manager_service_cert.id
 }
 
 // change manager appliance password - either through new_password or password_file
@@ -35,7 +35,7 @@ resource "vcda_appliance_password" "manager_appliance_password" {
   new_password     = var.local_password
   //password_file    = "vcda-pass.txt"
   appliance_ip     = var.manager_appliance_management_ip
-  service_cert     = data.vcda_service_cert.manager_service_cert.service_cert
+  service_cert     = data.vcda_service_cert.manager_service_cert.id
 }
 
 output "vcda_appliance_password_is_expired" {
@@ -59,7 +59,7 @@ output "vcda_ls_thumbprint" {
 }
 
 resource "vcda_vcenter_replication_manager" "manager_site" {
-  service_cert              = data.vcda_service_cert.manager_service_cert.service_cert
+  service_cert              = data.vcda_service_cert.manager_service_cert.id
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 
   license_key        = var.license_key
@@ -82,7 +82,7 @@ data "vcda_service_cert" "replicator_service_cert" {
 }
 
 output "vcda_replicator_api_thumbprint" {
-  value = data.vcda_service_cert.replicator_service_cert.service_cert
+  value = data.vcda_service_cert.replicator_service_cert.id
 }
 
 # get first replicator thumbprint
@@ -103,7 +103,7 @@ resource "vcda_appliance_password" "replicator_appliance_password" {
   current_password = var.initial_appliance_password
   new_password     = var.replicator_root_password
   //password_file    = "vcda-pass.txt"
-  service_cert     = data.vcda_service_cert.replicator_service_cert.service_cert
+  service_cert     = data.vcda_service_cert.replicator_service_cert.id
 }
 
 output "vcda_replicator_appliance_password" {
@@ -126,7 +126,7 @@ resource "vcda_replicator" "add_replicator" {
   site_name          = var.site_name
 
   api_thumbprint            = data.vcda_remote_services_thumbprint.replicator_thumbprint.id
-  service_cert              = data.vcda_service_cert.manager_service_cert.service_cert
+  service_cert              = data.vcda_service_cert.manager_service_cert.id
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 }
 
@@ -142,7 +142,7 @@ data "vcda_service_cert" "second_replicator_service_cert" {
 }
 
 output "vcda_second_replicator_service_cert" {
-  value = data.vcda_service_cert.second_replicator_service_cert.service_cert
+  value = data.vcda_service_cert.second_replicator_service_cert.id
 }
 
 # get second replicator thumbprint
@@ -163,7 +163,7 @@ resource "vcda_appliance_password" "second_replicator_appliance_password" {
   current_password = var.initial_appliance_password
   new_password     = var.replicator_root_password
   //password_file        = "vcda-pass.txt"
-  service_cert     = data.vcda_service_cert.second_replicator_service_cert.service_cert
+  service_cert     = data.vcda_service_cert.second_replicator_service_cert.id
 }
 
 output "vcda_second_replicator_appliance_password" {
@@ -186,7 +186,7 @@ resource "vcda_replicator" "add_second_replicator" {
   site_name          = var.site_name
 
   api_thumbprint            = data.vcda_remote_services_thumbprint.second_replicator_thumbprint.id
-  service_cert              = data.vcda_service_cert.manager_service_cert.service_cert
+  service_cert              = data.vcda_service_cert.manager_service_cert.id
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 }
 

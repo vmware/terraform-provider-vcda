@@ -88,7 +88,7 @@ data "vcda_remote_services_thumbprint" "ls_thumbprint" {
 }
 
 resource "vcda_cloud_director_replication_manager" "cloud_site" {
-  service_cert              = data.vcda_service_cert.cloud_service_cert.service_cert
+  service_cert              = data.vcda_service_cert.cloud_service_cert.id
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
   vcd_thumbprint            = data.vcda_remote_services_thumbprint.vcd_thumbprint.id
 

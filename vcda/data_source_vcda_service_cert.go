@@ -33,13 +33,8 @@ func dataSourceVcdaServiceCert() *schema.Resource {
 			},
 			"type": {
 				Type:        schema.TypeString,
-				Description: "Vm appliance type - manager, cloud, tunnel, replicator. If not set - returns an error",
-				Optional:    true,
-			},
-			"service_cert": {
-				Type:        schema.TypeString,
-				Description: "The appliance exposes the certificate in a base64-encoded DER format (i.e. no PEM header/footer + no newlines).",
-				Computed:    true,
+				Description: "Vm appliance type - manager, cloud, tunnel, replicator. If not set - returns an error.",
+				Required:    true,
 			},
 		},
 	}
@@ -107,10 +102,6 @@ func dataSourceVcdaServiceCertRead(_ context.Context, d *schema.ResourceData, m 
 
 	if applianceCert == "" {
 		return diag.FromErr(fmt.Errorf("applaince certificate for %s was not found in virtual machine extraConfig", extraConfigKey))
-	}
-
-	if err := d.Set("service_cert", applianceCert); err != nil {
-		return diag.FromErr(fmt.Errorf("error setting service_cert field: %s", err))
 	}
 
 	d.SetId(applianceCert)
