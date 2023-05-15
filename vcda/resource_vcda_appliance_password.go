@@ -26,43 +26,43 @@ func resourceVcdaAppliancePassword() *schema.Resource {
 			"current_password": {
 				Type:        schema.TypeString,
 				Sensitive:   true,
-				Description: "Current appliance password.",
-				Optional:    true,
+				Description: "The current password of the appliance.",
+				Required:    true,
 			},
 			"new_password": {
 				Type:      schema.TypeString,
 				Sensitive: true,
-				Description: "New appliance password. This value is never returned on read." +
-					`Either "new_password" or "password_file" must be included on creation.`,
+				Description: "The new password of the appliance. Note: This value is never returned on read. " +
+					"On creation, include either `new_password` or `password_file`.",
 				Optional:      true,
 				ConflictsWith: []string{"password_file"},
 			},
 			"password_file": {
 				Type: schema.TypeString,
-				Description: "Name of a file containing the appliance password." +
-					`Either "password_file" or "new_password" must be included on creation.`,
+				Description: "The name of a file containing the appliance password. " +
+					"On creation, include either `password_file` or `new_password`.",
 				Optional:      true,
 				ConflictsWith: []string{"new_password"},
 			},
 			"service_cert": {
 				Type:        schema.TypeString,
-				Description: "Appliance VM thumbprint.",
+				Description: "The service certificate.",
 				Required:    true,
 			},
 			"appliance_ip": {
 				Type:        schema.TypeString,
-				Description: "Appliance IP address.",
+				Description: "The IP address of the appliance.",
 				Required:    true,
 			},
 			//computed
 			"root_password_expired": {
 				Type:        schema.TypeBool,
-				Description: "Flag indicating whether root password is expired.",
+				Description: "Flag indicating whether the **root** user password is already expired.",
 				Computed:    true,
 			},
 			"seconds_until_expiration": {
 				Type:        schema.TypeInt,
-				Description: "Seconds until root password expiration.",
+				Description: "Seconds until the **root** user password expires.",
 				Computed:    true,
 			},
 		},

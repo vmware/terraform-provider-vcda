@@ -23,18 +23,19 @@ func dataSourceVcdaServiceCert() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"datacenter_id": {
 				Type:        schema.TypeString,
-				Description: "The managed object ID of the datacenter the virtual machine is in.",
+				Description: "The managed object ID of the datacenter where the virtual machine resides in.",
 				Required:    true,
 			},
 			"name": {
 				Type:        schema.TypeString,
-				Description: "Appliance VM name.",
+				Description: "The VM name of the appliance.",
 				Required:    true,
 			},
 			"type": {
-				Type:        schema.TypeString,
-				Description: "Vm appliance type - manager, cloud, tunnel, replicator. If not set - returns an error.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The type of the appliance role: manager, cloud, tunnel, replicator. " +
+					"When not set returns an error.",
+				Required: true,
 			},
 		},
 	}

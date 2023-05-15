@@ -20,84 +20,87 @@ func resourceVcdaReplicator() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"service_cert": {
 				Type:        schema.TypeString,
-				Description: "Replicator appliance VM thumbprint.",
+				Description: "The certificate of the Replicator Service.",
 				Required:    true,
 			},
 			"lookup_service_url": {
-				Type:        schema.TypeString,
-				Description: "Lookup service URL.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The URL of the vCenter Server Lookup service. " +
+					"For example, https://server.domain.com/lookupservice/sdk.",
+				Required: true,
 			},
 			"lookup_service_thumbprint": {
-				Type:        schema.TypeString,
-				Description: "Lookup service thumbprint.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The thumbprint of the vCenter Server Lookup service. It can either be computed from " +
+					"the `vcda_remote_services_thumbprint` data source or provided directly as a SHA-256 fingerprint.",
+				Required: true,
 			},
 			"api_url": {
 				Type:        schema.TypeString,
-				Description: "Replicator service API URL.",
+				Description: "The URL of the Replicator Service API.",
 				Required:    true,
 			},
 			"api_thumbprint": {
-				Type:        schema.TypeString,
-				Description: "Replicator service API thumbprint.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The thumbprint of the Replicator Service API. It can either be computed from " +
+					"the `vcda_remote_services_thumbprint` data source or provided directly as a SHA-256 fingerprint.",
+				Required: true,
 			},
 			"sso_user": {
 				Type:        schema.TypeString,
-				Description: "Replicator service SSO user.",
+				Description: "The single sign-on (SSO) user for the Replicator Service.",
 				Required:    true,
 			},
 			"sso_password": {
 				Type:        schema.TypeString,
-				Description: "Replicator service SSO password.",
+				Description: "The password of the SSO user for the Replicator Service.",
 				Required:    true,
 			},
 			"root_password": {
 				Type:        schema.TypeString,
-				Description: "Replicator service root password.",
+				Description: "The **root** user password of the Replicator Appliance.",
 				Required:    true,
 			},
 			"description": {
 				Type:        schema.TypeString,
-				Description: "Replicator service description.",
+				Description: "The description for the Replicator Service.",
 				Optional:    true,
 			},
 			"owner": {
 				Type:        schema.TypeString,
-				Description: "Replicator service owner.",
+				Description: "The owner of the Replicator Service.",
 				Required:    true,
 			},
 			"site_name": {
 				Type:        schema.TypeString,
-				Description: "Replicator service site name.",
+				Description: "The site name of the Manager Service.",
 				Required:    true,
 			},
 
 			// computed
 			"is_in_maintenance_mode": {
 				Type:        schema.TypeBool,
-				Description: "Flag indicating whether replicator service is in maintenance mode.",
+				Description: "Flag indicating whether the Replicator Service is placed in maintenance mode.",
 				Computed:    true,
 			},
 			"data_address": {
 				Type:        schema.TypeString,
-				Description: "Replicator service data address.",
+				Description: "The data address of the Replicator Service.",
 				Computed:    true,
 			},
 			"build_version": {
 				Type:        schema.TypeString,
-				Description: "Replicator service build version.",
+				Description: "The build version of the Replicator Service.",
 				Computed:    true,
 			},
 			"replicator_ls_url": {
 				Type:        schema.TypeString,
-				Description: "Replicator service lookup service URL.",
+				Description: "The vCenter Server Lookup service URL of the Replicator Service.",
 				Computed:    true,
 			},
 			"replicator_ls_thumbprint": {
 				Type:        schema.TypeString,
-				Description: "Replicator service lookup service thumbprint.",
+				Description: "The vCenter Server Lookup service thumbprint of the Replicator Service.",
 				Computed:    true,
 			},
 		},

@@ -23,21 +23,22 @@ func dataSourceVcdaRemoteServicesThumbprint() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"address": {
 				Type: schema.TypeString,
-				Description: "Remote appliance/service address. " +
-					"NOTE: this method will produce a thumbprint which is not verified/safe for use",
+				Description: "The address of the remote appliance/service. " +
+					"**NOTE:** this method produces a thumbprint that is not verified nor safe for use.",
 				Optional:      true,
 				ConflictsWith: []string{"pem_file"},
 				RequiredWith:  []string{"port"},
 			},
 			"port": {
 				Type:        schema.TypeString,
-				Description: "Remote appliance/service port.",
+				Description: "The port of the remote appliance/service. Use only with `address`.",
 				Optional:    true,
 			},
 			"pem_file": {
 				Type: schema.TypeString,
-				Description: "Name of a file containing the remote appliance/service last certificate in the chain (end entity cert) in PEM format." +
-					`Either "pem_file" or "address" must be included on creation.`,
+				Description: "The name of the file that contains the last certificate " +
+					"in the chain (end entity cert) of the remote appliance/service in PEM format. " +
+					"On creation, include either `pem_file` or `address`.",
 				Optional:      true,
 				ConflictsWith: []string{"address"},
 			},

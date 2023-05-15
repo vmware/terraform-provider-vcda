@@ -26,124 +26,128 @@ func resourceVcdaCloudDirectorReplicationManager() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"service_cert": {
 				Type:        schema.TypeString,
-				Description: "Appliance VM thumbprint.",
+				Description: "The certificate of the Cloud Director Replication Manager Service.",
 				Required:    true,
 			},
 			"vcd_thumbprint": {
-				Type:        schema.TypeString,
-				Description: "VCloud director service thumbprint.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The thumbprint of the Cloud Director service. It can either be computed from " +
+					"the `vcda_remote_services_thumbprint` data source or provided directly as a SHA-256 fingerprint.",
+				Required: true,
 			},
 			"lookup_service_thumbprint": {
-				Type:        schema.TypeString,
-				Description: "Lookup service thumbprint.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The thumbprint of the vCenter Server Lookup service. It can either be computed from " +
+					"the `vcda_remote_services_thumbprint` data source or provided directly as a SHA-256 fingerprint.",
+				Required: true,
 			},
 			"license_key": {
 				Type:        schema.TypeString,
-				Description: "License key.",
+				Description: "The license key for VMware Cloud Director Availability.",
 				Required:    true,
 			},
 			"site_name": {
 				Type:        schema.TypeString,
-				Description: "Site name.",
+				Description: "The site name of the Cloud Director Replication Manager.",
 				Required:    true,
 			},
 			"site_description": {
 				Type:        schema.TypeString,
-				Description: "Site description.",
+				Description: "The site description of the Cloud Director Replication Manager.",
 				Optional:    true,
 			},
 			"public_endpoint_address": {
 				Type:        schema.TypeString,
-				Description: "Public API endpoint address.",
+				Description: "The public API endpoint address.",
 				Required:    true,
 			},
 			"public_endpoint_port": {
 				Type:        schema.TypeInt,
-				Description: "Public API endpoint port.",
+				Description: "The public API endpoint port.",
 				Required:    true,
 			},
 			"vcd_username": {
 				Type:        schema.TypeString,
-				Description: "VCloud director username.",
+				Description: "Cloud Director user name.",
 				Required:    true,
 			},
 			"vcd_password": {
 				Type:        schema.TypeString,
-				Description: "VCloud director password.",
+				Description: "Cloud Director password.",
 				Required:    true,
 			},
 			"vcd_url": {
-				Type:        schema.TypeString,
-				Description: "VCloud director URL.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "This is the URL for the Cloud Director API endpoint. " +
+					"For example, https://server.domain.com/api.",
+				Required: true,
 			},
 			"lookup_service_url": {
-				Type:        schema.TypeString,
-				Description: "Lookup service URL.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The URL of the vCenter Server Lookup service. " +
+					"For example, https://server.domain.com/lookupservice/sdk.",
+				Required: true,
 			},
 
 			// computed:
 			"is_licensed": {
 				Type:        schema.TypeBool,
-				Description: "Flag indicating whether the service is licensed.",
+				Description: "Flag indicating whether the solution is licensed.",
 				Computed:    true,
 			},
 			"expiration_date": {
 				Type:        schema.TypeInt,
-				Description: "License expiration date.",
+				Description: "VMware Cloud Director Availability license expiration date.",
 				Computed:    true,
 			},
 			"ls_url": {
 				Type:        schema.TypeString,
-				Description: "Lookup service URL.",
+				Description: "The URL of the vCenter Server Lookup service.",
 				Computed:    true,
 			},
 			"ls_thumbprint": {
 				Type:        schema.TypeString,
-				Description: "SHA-256 lookup service thumbprint.",
+				Description: "SHA-256 vCenter Server Lookup service thumbprint.",
 				Computed:    true,
 			},
 			"local_site": {
 				Type:        schema.TypeString,
-				Description: "Local site name.",
+				Description: "Cloud Director Replication Manager local site name.",
 				Computed:    true,
 			},
 			"local_site_description": {
 				Type:        schema.TypeString,
-				Description: "Local site description.",
+				Description: "Cloud Director Replication Manager local site description.",
 				Computed:    true,
 			},
 			"vcloud_url": {
 				Type:        schema.TypeString,
-				Description: "VCloud director URL.",
+				Description: "Cloud Director URL.",
 				Computed:    true,
 			},
 			"vcloud_thumbprint": {
 				Type:        schema.TypeString,
-				Description: "VCloud director thumbprint.",
+				Description: "Cloud Director thumbprint.",
 				Computed:    true,
 			},
 			"vcloud_username": {
 				Type:        schema.TypeString,
-				Description: "VCloud director username.",
+				Description: "Cloud Director user name.",
 				Computed:    true,
 			},
 			"tunnel_url": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service URL.",
+				Description: "Tunnel Service URL.",
 				Computed:    true,
 			},
 			"tunnel_certificate": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service certificate.",
+				Description: "Tunnel Service certificate.",
 				Computed:    true,
 			},
 			"is_combined": {
 				Type:        schema.TypeBool,
-				Description: "Flag indicating whether the appliance is of type combined.",
+				Description: "Flag indicating whether the appliance role is Cloud Director Combined Appliance.",
 				Computed:    true,
 			},
 

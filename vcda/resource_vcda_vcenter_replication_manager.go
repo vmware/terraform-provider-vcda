@@ -20,37 +20,39 @@ func resourceVcdaVcenterReplicationManager() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"service_cert": {
 				Type:        schema.TypeString,
-				Description: "Appliance VM thumbprint.",
+				Description: "The service certificate of the vCenter Replication Manager.",
 				Required:    true,
 			},
 			"lookup_service_thumbprint": {
-				Type:        schema.TypeString,
-				Description: "Lookup service thumbprint.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The thumbprint of the vCenter Server Lookup service. It can either be computed from " +
+					"the `vcda_remote_services_thumbprint` data source or provided directly as a SHA-256 fingerprint.",
+				Required: true,
 			},
 			"license_key": {
 				Type:        schema.TypeString,
-				Description: "License key.",
+				Description: "The license key of VMware Cloud Director Availability.",
 				Required:    true,
 			},
 			"site_name": {
 				Type:        schema.TypeString,
-				Description: "Site name.",
+				Description: "The site name of the vCenter Replication Manager.",
 				Required:    true,
 			},
 			"lookup_service_url": {
-				Type:        schema.TypeString,
-				Description: "Lookup service URL.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The URL of the vCenter Server Lookup service. " +
+					"For example, https://server.domain.com/lookupservice/sdk.",
+				Required: true,
 			},
 			"sso_user": {
 				Type:        schema.TypeString,
-				Description: "SSO admin username.",
+				Description: "The user name of a single sign-on (SSO) administrator.",
 				Required:    true,
 			},
 			"sso_password": {
 				Type:        schema.TypeString,
-				Description: "SSO admin password.",
+				Description: "The password of the SSO administrator.",
 				Required:    true,
 			},
 
@@ -62,32 +64,32 @@ func resourceVcdaVcenterReplicationManager() *schema.Resource {
 			},
 			"expiration_date": {
 				Type:        schema.TypeInt,
-				Description: "License expiration date.",
+				Description: "The expiration date of the license.",
 				Computed:    true,
 			},
 			"site": {
 				Type:        schema.TypeString,
-				Description: "Site name.",
+				Description: "The site name of the vCenter Replication Manager.",
 				Computed:    true,
 			},
 			"ls_url": {
 				Type:        schema.TypeString,
-				Description: "Lookup service URL.",
+				Description: "The URL of the vCenter Server Lookup service.",
 				Computed:    true,
 			},
 			"ls_thumbprint": {
 				Type:        schema.TypeString,
-				Description: "Lookup service thumbprint.",
+				Description: "The thumbprint of the vCenter Server Lookup service.",
 				Computed:    true,
 			},
 			"tunnel_url": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service URL.",
+				Description: "The URL of the Tunnel Service.",
 				Computed:    true,
 			},
 			"tunnel_certificate": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service certificate.",
+				Description: "The certificate of the Tunnel Service.",
 				Computed:    true,
 			},
 		},
@@ -232,11 +234,11 @@ func setSiteData(d *schema.ResourceData, site *SiteConfig) error {
 		return fmt.Errorf("error setting ls_thumbprint field: %s", err)
 	}
 
-	if err := d.Set("tunnel_url", site.LsURL); err != nil {
+	if err := d.Set("tunnel_url", site.TunnelURL); err != nil {
 		return fmt.Errorf("error setting tunnel_url field: %s", err)
 	}
 
-	if err := d.Set("tunnel_certificate", site.LsThumbprint); err != nil {
+	if err := d.Set("tunnel_certificate", site.TunnelCertificate); err != nil {
 		return fmt.Errorf("error setting tunnel_certificate field: %s", err)
 	}
 

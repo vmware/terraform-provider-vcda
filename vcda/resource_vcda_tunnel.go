@@ -19,35 +19,36 @@ func resourceVcdaTunnel() *schema.Resource {
 		DeleteContext: resourceVcdaTunnelDelete,
 		Schema: map[string]*schema.Schema{
 			"service_cert": {
-				Type:        schema.TypeString,
-				Description: "Tunnel appliance VM thumbprint.",
-				Required:    true,
+				Type: schema.TypeString,
+				Description: "The service certificate of the Cloud Director Replication Management Service " +
+					"to which the Tunnel Service is being added.",
+				Required: true,
 			},
 			"url": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service URL.",
+				Description: "The URL of the Tunnel Service.",
 				Required:    true,
 			},
 			"certificate": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service certificate.",
+				Description: "The certificate of the Tunnel Service.",
 				Required:    true,
 			},
 			"root_password": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service root password.",
+				Description: "The **root** user password of the Tunnel Appliance.",
 				Required:    true,
 			},
 
 			// computed
 			"tunnel_url": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service URL.",
+				Description: "The URL of the Tunnel Service.",
 				Computed:    true,
 			},
 			"tunnel_certificate": {
 				Type:        schema.TypeString,
-				Description: "Tunnel service certificate.",
+				Description: "The certificate of the Tunnel Service.",
 				Computed:    true,
 			},
 		},
