@@ -27,7 +27,7 @@ func (at *AccTests) TestProvider(t *testing.T) {
 	}
 }
 
-func (at *AccTests) TestProvider_impl(t *testing.T) {
+func (at *AccTests) TestProvider_impl() {
 	var _ = Provider()
 }
 
@@ -67,7 +67,7 @@ func TestRunner(t *testing.T) {
 	t.Run("provider", func(t *testing.T) {
 		test := AccTests{Test: t}
 		test.TestProvider(t)
-		test.TestProvider_impl(t)
+		test.TestProvider_impl()
 	})
 
 	t.Run("cloud", func(t *testing.T) {

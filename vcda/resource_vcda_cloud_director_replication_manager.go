@@ -6,11 +6,11 @@ package vcda
 import (
 	"context"
 	"fmt"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/retry"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -254,15 +254,15 @@ func resourceCloudDirectorReplicationManagerCreate(ctx context.Context, d *schem
 
 	d.SetId(site.ID)
 
-	err = resource.RetryContext(context.Background(), d.Timeout(schema.TimeoutCreate), func() *resource.RetryError {
+	err = retry.RetryContext(context.Background(), d.Timeout(schema.TimeoutCreate), func() *retry.RetryError {
 		isConfigured, err := c.isConfigured(serviceCert)
 
 		if err != nil {
-			return resource.NonRetryableError(err)
+			return retry.NonRetryableError(err)
 		}
 
 		if !isConfigured.IsConfigured {
-			return resource.RetryableError(fmt.Errorf("service is not configured yet"))
+			return retry.RetryableError(fmt.Errorf("service is not configured yet"))
 		}
 
 		return nil

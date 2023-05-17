@@ -46,7 +46,7 @@ func dataSourceVcdaRemoteServicesThumbprint() *schema.Resource {
 	}
 }
 
-func dataSourceVcdaRemoteServicesThumbprintRead(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func dataSourceVcdaRemoteServicesThumbprintRead(_ context.Context, d *schema.ResourceData, _ interface{}) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	address := d.Get("address").(string)

@@ -155,10 +155,6 @@ func (c *Client) GetAuthToken(host string, password string, serviceCert string) 
 	return &vcdaToken, nil
 }
 
-func (c *Client) getAuthToken(password string, serviceCert string) (*string, error) {
-	return c.GetAuthToken(c.VcdaIP, password, serviceCert)
-}
-
 // c4/h4 client methods
 func (c *Client) changePassword(host string, currentPassword string, newPassword string, serviceCert string) error {
 	reqURL, err := c.BuildRequestURL(host, "/config/root-password")
