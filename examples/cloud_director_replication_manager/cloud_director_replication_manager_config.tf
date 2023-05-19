@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     vcda = {
-      source  = "terraform.example.com/vmware/vcda"
+      source  = "vmware/vcda"
       version = ">=1.0"
     }
   }
