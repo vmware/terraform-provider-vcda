@@ -26,7 +26,7 @@ type Client struct {
 	LocalPassword string
 }
 
-func (c *Client) NewHttpClientConfig(serviceCert string) (*http.Client, error) {
+func (c *Client) NewHTTPClientConfig(serviceCert string) (*http.Client, error) {
 	if serviceCert == "" {
 		return nil, fmt.Errorf("vcda service certificate is required")
 	}
@@ -66,7 +66,7 @@ func (c *Client) DoRequest(host string, req *http.Request, serviceCert string) (
 	req.Header.Set(ContentTypeHeader, ContentTypeHeaderValue)
 	req.Header.Set(AcceptHeader, AcceptHeaderValue)
 
-	hcl, err := c.NewHttpClientConfig(serviceCert)
+	hcl, err := c.NewHTTPClientConfig(serviceCert)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func (c *Client) GetAuthToken(host string, password string, serviceCert string) 
 		return nil, err
 	}
 
-	hcl, err := c.NewHttpClientConfig(serviceCert)
+	hcl, err := c.NewHTTPClientConfig(serviceCert)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +185,7 @@ func (c *Client) changePassword(host string, currentPassword string, newPassword
 	req.Header.Set(AcceptHeader, AcceptHeaderValue)
 	req.Header.Set(ConfigSecretHeader, currentPassword)
 
-	hcl, err := c.NewHttpClientConfig(serviceCert)
+	hcl, err := c.NewHTTPClientConfig(serviceCert)
 	if err != nil {
 		return err
 	}

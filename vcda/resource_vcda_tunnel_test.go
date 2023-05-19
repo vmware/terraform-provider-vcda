@@ -20,7 +20,7 @@ func (at *AccTests) TestAccVcdaTunnel_basic(t *testing.T) {
 		ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(TunnelVmName), "tunnel", os.Getenv(TunnelAddress)),
+				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(TunnelVMName), "tunnel", os.Getenv(TunnelAddress)),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_appliance_password.appliance_password", "root_password_expired", "false"),
 					resource.TestCheckResourceAttrSet("vcda_appliance_password.appliance_password", "seconds_until_expiration"),
@@ -38,11 +38,11 @@ func (at *AccTests) TestAccVcdaTunnel_basic(t *testing.T) {
 }
 
 func testAccVcdaTunnelPreCheck(t *testing.T) {
-	if v := os.Getenv(CloudVmName); v == "" {
-		t.Fatal(CloudVmName + " must be set for vcda_tunnel acceptance tests")
+	if v := os.Getenv(CloudVMName); v == "" {
+		t.Fatal(CloudVMName + " must be set for vcda_tunnel acceptance tests")
 	}
-	if os.Getenv(TunnelVmName) == "" {
-		t.Fatal(TunnelVmName + " must be set for vcda_tunnel acceptance tests")
+	if os.Getenv(TunnelVMName) == "" {
+		t.Fatal(TunnelVMName + " must be set for vcda_tunnel acceptance tests")
 	}
 	if os.Getenv(TunnelAddress) == "" {
 		t.Fatal(TunnelAddress + " must be set for vcda_tunnel acceptance tests")
@@ -81,8 +81,8 @@ resource "vcda_tunnel" "add_tunnel" {
 }
 `,
 		os.Getenv(DatacenterID),
-		os.Getenv(CloudVmName),
-		os.Getenv(TunnelVmName),
+		os.Getenv(CloudVMName),
+		os.Getenv(TunnelVMName),
 		"https://"+os.Getenv(TunnelAddress)+":8047",
 		os.Getenv(RootPassword),
 	)

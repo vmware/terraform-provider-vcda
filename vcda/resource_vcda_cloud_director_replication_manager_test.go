@@ -49,8 +49,8 @@ func (at *AccTests) TestAccVcdaCloudDirectorReplicationManager_basic(t *testing.
 }
 
 func testAccVcdaCloudDirectorReplicationManagerPreCheck(t *testing.T) {
-	if v := os.Getenv(CloudVmName); v == "" {
-		t.Fatal(CloudVmName + " must be set for vcda_cloud_director_replication_manager acceptance tests")
+	if v := os.Getenv(CloudVMName); v == "" {
+		t.Fatal(CloudVMName + " must be set for vcda_cloud_director_replication_manager acceptance tests")
 	}
 	if os.Getenv(VcloudDirectorAddress) == "" {
 		t.Fatal(VcloudDirectorAddress + " must be set for vcda_cloud_director_replication_manager acceptance tests")
@@ -107,7 +107,7 @@ resource "vcda_cloud_director_replication_manager" "cloud_site" {
 }
 `,
 		os.Getenv(DatacenterID),
-		os.Getenv(CloudVmName),
+		os.Getenv(CloudVMName),
 		os.Getenv(VcloudDirectorAddress),
 		os.Getenv(LookupServiceAddress),
 		os.Getenv(LicenseKey),

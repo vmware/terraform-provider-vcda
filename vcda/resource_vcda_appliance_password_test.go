@@ -19,7 +19,7 @@ func (at *AccTests) TestAccVcdaAppliancePassword_basic(t *testing.T) {
 		ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(CloudVmName), "cloud", os.Getenv(VcdaIP)),
+				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(CloudVMName), "cloud", os.Getenv(VcdaIP)),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_appliance_password.appliance_password", "root_password_expired", "false"),
 					resource.TestCheckResourceAttrSet("vcda_appliance_password.appliance_password", "seconds_until_expiration"),

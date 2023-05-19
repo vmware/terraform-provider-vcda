@@ -33,6 +33,6 @@ data "vcda_service_cert" "service_cert" {
   type          = "cloud"
 }`,
 		os.Getenv(DatacenterID),
-		os.Getenv(CloudVmName),
+		os.Getenv(CloudVMName),
 	)
 }

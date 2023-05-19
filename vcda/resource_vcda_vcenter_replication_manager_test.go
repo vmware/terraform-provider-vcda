@@ -20,7 +20,7 @@ func (at *AccTests) TestAccVcdaVcenterReplicationManager_basic(t *testing.T) {
 		ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			{
-				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(ManagerVmName), "manager", os.Getenv(ManagerAddress)),
+				Config: testAccVcdaAppliancePasswordConfigBasic(os.Getenv(ManagerVMName), "manager", os.Getenv(ManagerAddress)),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_appliance_password.appliance_password", "root_password_expired", "false"),
 					resource.TestCheckResourceAttrSet("vcda_appliance_password.appliance_password", "seconds_until_expiration"),
@@ -90,7 +90,7 @@ resource "vcda_vcenter_replication_manager" "manager_site" {
 }
 `,
 		os.Getenv(DatacenterID),
-		os.Getenv(ManagerVmName),
+		os.Getenv(ManagerVMName),
 		os.Getenv(LookupServiceAddress),
 		os.Getenv(LicenseKey),
 		"https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk",
