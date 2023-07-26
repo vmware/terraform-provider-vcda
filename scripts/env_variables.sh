@@ -16,6 +16,7 @@ export DC_ID=''
 # Appliances VM names
 export CLOUD_VM_NAME=''
 export MANAGER_VM_NAME=''
+export REMOTE_MANAGER_VM_NAME=''
 export REPLICATOR_VM_NAME=''
 export TUNNEL_VM_NAME=''
 
@@ -37,5 +38,6 @@ export SSO_PASSWORD=''
 
 # Services endpoints
 export MANAGER_ADDRESS=''
+export REMOTE_MANAGER_ADDRESS=''
 export REPLICATOR_ADDRESS=''
 export TUNNEL_ADDRESS=''

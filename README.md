@@ -12,7 +12,10 @@ appliance roles:
 The initial configuration includes changing the initial password of the **root** user of the appliance, adding external
 Replicator Service instances and configuring the Tunnel Service.
 
-* For information about the Terraform provider, see the [provider documentation](https://registry.terraform.io/providers/hashicorp/vcda/latest/docs).
+Since VCDA Terraform Provider v2.0.0, the provider supports one-step pairing of either a Cloud Director Replication Management Appliance to an already configured
+Cloud Director Replication Management Appliance, or vCenter Replication Management Appliance to an already configured vCenter Replication Management Appliance.
+
+* For information about the Terraform provider, see the [provider documentation](https://registry.terraform.io/providers/vmware/vcda/latest/docs).
 * For information about VMware Cloud Director Availability,
   see the [ Product Page](https://www.vmware.com/products/cloud-director-availability.html).
 * For more information,
@@ -78,7 +81,7 @@ instructions above, follow the instructions
 to [install it as a plugin](https://www.terraform.io/docs/plugins/basics.html#installing-plugins). After placing the
 custom-built provider into your plugins directory, to initialize it run `terraform init`.
 
-For information about either installation method and for documentation about the provider-specific configuration options, see the [VMware Cloud Director Availability provider's website](https://www.terraform.io/docs/providers/vmware-cloud-director-availability/index.html).
+For information about either installation method and for documentation about the provider-specific configuration options, see the [VMware Cloud Director Availability provider's website](https://registry.terraform.io/providers/vmware/vcda/latest/docs).
 
 # Automated Installation (Recommended)
 
@@ -142,9 +145,9 @@ work is being duplicated, before you start working on a feature, check the
 [Issue Tracker][gh-issues] and the existing [Pull Requests][gh-prs]. For further clarification, you can also ask in a
 new issue.
 
-[gh-issues]: https://github.com/vmware/terraform-provider-for-vmware-cloud-director-availability/issues
+[gh-issues]: https://github.com/vmware/terraform-provider-vcda/issues
 
-[gh-prs]: https://github.com/vmware/terraform-provider-for-vmware-cloud-director-availability/pulls
+[gh-prs]: https://github.com/vmware/terraform-provider-vcda/pulls
 
 For more information, see the [Building the Provider](#building-the-provider) section and for instructions
 about manually loading the provider for development, see the [Manual Installation](#manual-installation) section.
@@ -187,6 +190,12 @@ Manager tests
 
 ```sh
 make testacc TESTS=/manager
+```
+
+Pairing tests
+
+```sh
+make testacc TESTS=/pair
 ```
 
 Data sources tests
