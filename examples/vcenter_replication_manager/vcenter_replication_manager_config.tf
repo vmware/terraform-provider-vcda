@@ -193,3 +193,31 @@ resource "vcda_replicator" "add_second_replicator" {
 output "vcda_add_second_replicator" {
   value = vcda_replicator.add_second_replicator.*
 }
+
+# remote site thumbprint
+data "vcda_remote_services_thumbprint" "remote_cloud_thumbprint" {
+  address = var.remote_site_address
+  port    = "443"
+  //pem_file   = "vcd-cert.pem"
+}
+
+output "vcda_remote_cloud_thumbprint" {
+  value = data.vcda_remote_services_thumbprint.remote_cloud_thumbprint.*
+}
+
+# Pair site
+resource "vcda_pair_site" "pair_site" {
+  depends_on = [
+    vcda_replicator.add_second_replicator
+  ]
+
+  service_cert   = data.vcda_service_cert.manager_service_cert.id
+  api_thumbprint = data.vcda_remote_services_thumbprint.remote_cloud_thumbprint.id
+
+  api_url             = var.remote_site_endpoint_url
+  pairing_description = "pair site"
+}
+
+output "vcda_pair_site1" {
+  value = vcda_pair_site.pair_site.*
+}

@@ -69,6 +69,7 @@ func Provider() *schema.Provider {
 			"vcda_cloud_director_replication_manager": resourceVcdaCloudDirectorReplicationManager(),
 			"vcda_replicator":                         resourceVcdaReplicator(),
 			"vcda_tunnel":                             resourceVcdaTunnel(),
+			"vcda_pair_site":                          resourceVcdaPairSite(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"vcda_remote_services_thumbprint": dataSourceVcdaRemoteServicesThumbprint(),

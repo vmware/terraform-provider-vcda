@@ -28,6 +28,7 @@ const (
 	DatacenterID              = "DC_ID"
 	CloudVMName               = "CLOUD_VM_NAME"
 	ManagerVMName             = "MANAGER_VM_NAME"
+	RemoteManagerVMName       = "REMOTE_MANAGER_VM_NAME"
 	ReplicatorVMName          = "REPLICATOR_VM_NAME"
 	TunnelVMName              = "TUNNEL_VM_NAME"
 	RootPassword              = "ROOT_PASSWORD"
@@ -43,4 +44,5 @@ const (
 	SsoPassword               = "SSO_PASSWORD"
 	TunnelAddress             = "TUNNEL_ADDRESS"
 	ManagerAddress            = "MANAGER_ADDRESS"
+	RemoteManagerAddress      = "REMOTE_MANAGER_ADDRESS"
 )

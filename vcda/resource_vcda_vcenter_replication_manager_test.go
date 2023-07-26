@@ -27,7 +27,7 @@ func (at *AccTests) TestAccVcdaVcenterReplicationManager_basic(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccVcdaVcenterReplicationManagerConfigBasic(),
+				Config: testAccVcdaVcenterReplicationManagerConfigBasic(os.Getenv(ManagerVMName), "manager-site1"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "is_licensed", "true"),
 					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "expiration_date", "0"),
@@ -50,6 +50,9 @@ func testAccVcdaVcenterReplicationManagerPreCheck(t *testing.T) {
 	if err != nil {
 		t.Fatal("error setting" + VcdaIP + " to " + ManagerAddress + " for vcda_vcenter_replication_manager acceptance tests")
 	}
+	if v := os.Getenv(ManagerVMName); v == "" {
+		t.Fatal(ManagerVMName + " must be set for vcda_vcenter_replication_manager acceptance tests")
+	}
 	if os.Getenv(LookupServiceAddress) == "" {
 		t.Fatal(LookupServiceAddress + " must be set for vcda_vcenter_replication_manager acceptance tests")
 	}
@@ -64,7 +67,7 @@ func testAccVcdaVcenterReplicationManagerPreCheck(t *testing.T) {
 	}
 }
 
-func testAccVcdaVcenterReplicationManagerConfigBasic() string {
+func testAccVcdaVcenterReplicationManagerConfigBasic(managerVMName string, siteName string) string {
 	return fmt.Sprintf(`
 data "vcda_service_cert" "manager_service_cert" {
   datacenter_id = %q
@@ -82,16 +85,17 @@ resource "vcda_vcenter_replication_manager" "manager_site" {
   lookup_service_thumbprint = data.vcda_remote_services_thumbprint.ls_thumbprint.id
 
   license_key        = %q
-  site_name          = "manager-site1"
+  site_name          = %q
   lookup_service_url = %q
   sso_user           = %q
   sso_password       = %q
 }
 `,
 		os.Getenv(DatacenterID),
-		os.Getenv(ManagerVMName),
+		managerVMName,
 		os.Getenv(LookupServiceAddress),
 		os.Getenv(LicenseKey),
+		siteName,
 		"https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk",
 		os.Getenv(SsoUser),
 		os.Getenv(SsoPassword),

@@ -31,3 +31,7 @@ variable "replicator_sso_user" { default = "" }
 variable "replicator_sso_password" { default = "" }
 variable "replicator_root_password" { default = "" }
 variable "replicator_owner" { default = "" }
+
+# Pairing
+variable "remote_site_address" { default = "" }
+variable "remote_site_endpoint_url" { default = "" }

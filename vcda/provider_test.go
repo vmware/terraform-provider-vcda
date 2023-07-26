@@ -83,6 +83,11 @@ func TestRunner(t *testing.T) {
 		test.TestAccVcdaReplicator_basic(t)
 	})
 
+	t.Run("pair", func(t *testing.T) {
+		test := AccTests{Test: t}
+		test.TestAccVcdaPairSite_basic(t)
+	})
+
 	t.Run("datasource", func(t *testing.T) {
 		test := AccTests{Test: t}
 		test.TestAccVcdaDataSourceRemoteServicesThumbprint_basic(t)

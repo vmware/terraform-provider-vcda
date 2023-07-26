@@ -182,3 +182,92 @@ type VspherePluginStatus struct {
 type IsServiceConfigured struct {
 	IsConfigured bool `json:"isConfigured"`
 }
+
+type PairCloudSiteData struct {
+	APIThumbprint string `json:"apiThumbprint"`
+	APIURL        string `json:"apiUrl"`
+	Description   string `json:"description"`
+	Site          string `json:"site"`
+}
+
+type PairVcenterSiteData struct {
+	APIThumbprint string `json:"apiThumbprint"`
+	APIURL        string `json:"apiUrl"`
+	Description   string `json:"description"`
+}
+
+type Tasks struct {
+	Items  []Task `json:"items"`
+	Total  int64  `json:"total"`
+	Offset int64  `json:"offset"`
+	Limit  int64  `json:"limit"`
+}
+
+type Task struct {
+	ID           string        `json:"id"`
+	User         string        `json:"user"`
+	WorkflowInfo interface{}   `json:"workflowInfo"`
+	Progress     int64         `json:"progress"`
+	State        string        `json:"state"`
+	LastUpdated  int64         `json:"lastUpdated"`
+	StartTime    int64         `json:"startTime"`
+	EndTime      int64         `json:"endTime"`
+	ResultType   string        `json:"resultType"`
+	Result       Result        `json:"result"`
+	Error        Error         `json:"error"`
+	Warnings     []interface{} `json:"warnings"`
+	Site         string        `json:"site"`
+}
+
+type Result struct {
+	Minor                interface{} `json:"minor"`
+	Major                interface{} `json:"major"`
+	ID                   *string     `json:"id,omitempty"`
+	Site                 *string     `json:"site,omitempty"`
+	Description          *string     `json:"description,omitempty"`
+	APIURL               *string     `json:"apiUrl,omitempty"`
+	APIPublicURL         *string     `json:"apiPublicUrl,omitempty"`
+	APIThumbprint        *string     `json:"apiThumbprint,omitempty"`
+	IsLocal              *bool       `json:"isLocal,omitempty"`
+	State                *State      `json:"state,omitempty"`
+	APIVersion           *string     `json:"apiVersion,omitempty"`
+	IsProviderDeployment *bool       `json:"isProviderDeployment,omitempty"`
+	PeerTunnelCERT       interface{} `json:"peerTunnelCert"`
+}
+
+type Error struct {
+	Code       string   `json:"code"`
+	Msg        string   `json:"msg"`
+	Args       []string `json:"args"`
+	Stacktrace string   `json:"stacktrace"`
+}
+
+type VcenterSites []VcenterSite
+
+type VcenterSite struct {
+	ID                   string      `json:"id"`
+	Site                 string      `json:"site"`
+	Description          string      `json:"description"`
+	APIURL               string      `json:"apiUrl"`
+	APIPublicURL         string      `json:"apiPublicUrl"`
+	APIThumbprint        string      `json:"apiThumbprint"`
+	IsLocal              bool        `json:"isLocal"`
+	State                State       `json:"state"`
+	APIVersion           string      `json:"apiVersion"`
+	IsProviderDeployment bool        `json:"isProviderDeployment"`
+	PeerTunnelCERT       interface{} `json:"peerTunnelCert"`
+}
+
+type CloudSites []CloudSite
+
+type CloudSite struct {
+	Site          string `json:"site"`
+	Description   string `json:"description"`
+	APIURL        string `json:"apiUrl"`
+	APIPublicURL  string `json:"apiPublicUrl"`
+	APIThumbprint string `json:"apiThumbprint"`
+	IsLocal       bool   `json:"isLocal"`
+	State         State  `json:"state"`
+	APIVersion    string `json:"apiVersion"`
+	BuildVersion  string `json:"buildVersion"`
+}

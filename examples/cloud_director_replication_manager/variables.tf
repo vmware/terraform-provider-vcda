@@ -43,3 +43,8 @@ variable "replicator_owner" { default = "" }
 variable "tunnel_url" { default = "" }
 variable "second_tunnel_url" { default = "" }
 variable "tunnel_root_password" { default = "" }
+
+# Pairing
+variable "remote_cloud_address" { default = "" }
+variable "remote_cloud_site_name" { default = "" }
+variable "remote_cloud_endpoint_url" { default = "" }

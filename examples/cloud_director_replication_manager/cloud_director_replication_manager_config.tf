@@ -277,3 +277,32 @@ resource "vcda_tunnel" "add_tunnel" {
 output "vcda_add_tunnel" {
   value = vcda_tunnel.add_tunnel.*
 }
+
+# remote cloud site thumbprint
+data "vcda_remote_services_thumbprint" "remote_cloud_thumbprint" {
+  address = var.remote_cloud_address
+  port    = "443"
+}
+
+output "vcda_remote_cloud_thumbprint" {
+  value = data.vcda_remote_services_thumbprint.remote_cloud_thumbprint.*
+}
+
+# Pair cloud site
+resource "vcda_pair_site" "pair_cloud_site" {
+  depends_on = [
+    vcda_replicator.add_second_replicator,
+    vcda_tunnel.add_tunnel
+  ]
+
+  api_url             = var.remote_cloud_endpoint_url
+  pairing_description = "pair cloud site"
+  site                = var.remote_cloud_site_name
+
+  service_cert   = data.vcda_service_cert.cloud_service_cert.id
+  api_thumbprint = data.vcda_remote_services_thumbprint.remote_cloud_thumbprint.id
+}
+
+output "vcda_pair_cloud_site1" {
+  value = vcda_pair_site.pair_cloud_site.*
+}

@@ -883,3 +883,228 @@ func (c *Client) isConfigured(serviceCert string) (*IsServiceConfigured, error) 
 
 	return &isServiceConfigured, nil
 }
+
+func (c *Client) getTask(serviceCert string, taskID string) (*Task, error) {
+	reqURL, err := c.buildRequestURL("/tasks")
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, *reqURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	q := req.URL.Query()
+	q.Add("sort", "")
+	q.Add("offset", "0")
+	q.Add("limit", "100")
+	req.URL.RawQuery = q.Encode()
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	tasks := Tasks{}
+	err = json.Unmarshal(body, &tasks)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	for _, task := range tasks.Items {
+		if task.ID == taskID {
+			return &task, nil
+		}
+	}
+	return nil, fmt.Errorf("Task %s not found", taskID)
+}
+
+func (c *Client) pairSite(serviceCert string, apiThumbprint string, apiURL string, description string, site string) (*string, error) {
+	reqURL, err := c.buildRequestURL("/sites")
+	if err != nil {
+		return nil, err
+	}
+
+	var reqData interface{}
+	if site != "" {
+		reqData = PairCloudSiteData{APIThumbprint: apiThumbprint, APIURL: apiURL, Description: description, Site: site}
+	} else {
+		reqData = PairVcenterSiteData{APIThumbprint: apiThumbprint, APIURL: apiURL, Description: description}
+	}
+
+	rb, err := json.Marshal(reqData)
+	if err != nil {
+		return nil, fmt.Errorf("could not marshal request data: %s", err)
+	}
+
+	req, err := http.NewRequest(http.MethodPost, *reqURL, strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	resBody := make(map[string]interface{})
+	err = json.Unmarshal(body, &resBody)
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	taskID, ok := resBody["id"].(string)
+	if !ok {
+		return nil, err
+	}
+
+	return &taskID, nil
+}
+
+func (c *Client) repairSite(serviceCert string, site string, apiThumbprint string, apiURL string, description string) (*string, error) {
+	reqURL, err := c.buildRequestURL("/sites/" + site)
+	if err != nil {
+		return nil, err
+	}
+
+	reqData := PairVcenterSiteData{APIThumbprint: apiThumbprint, APIURL: apiURL, Description: description}
+
+	rb, err := json.Marshal(reqData)
+	if err != nil {
+		return nil, fmt.Errorf("could not marshal request data: %s", err)
+	}
+
+	req, err := http.NewRequest(http.MethodPut, *reqURL, strings.NewReader(string(rb)))
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	resBody := make(map[string]interface{})
+	err = json.Unmarshal(body, &resBody)
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	taskID, ok := resBody["id"].(string)
+	if !ok {
+		return nil, err
+	}
+
+	return &taskID, nil
+}
+
+func (c *Client) unpairSite(serviceCert string, site string) (*string, error) {
+	reqURL, err := c.buildRequestURL("/sites/" + site)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, *reqURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	resBody := make(map[string]interface{})
+	err = json.Unmarshal(body, &resBody)
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	taskID, ok := resBody["id"].(string)
+	if !ok {
+		return nil, err
+	}
+
+	return &taskID, nil
+}
+
+func (c *Client) getVcenterSite(serviceCert string, apiURL string) (*VcenterSite, error) {
+	reqURL, err := c.buildRequestURL("/sites")
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, *reqURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	vcdaSites := VcenterSites{}
+	err = json.Unmarshal(body, &vcdaSites)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	var vcdaSite *VcenterSite
+	for _, v := range vcdaSites {
+		if v.APIPublicURL == apiURL {
+			vcdaSite = &v
+			break
+		}
+	}
+
+	if vcdaSite == nil {
+		return nil, fmt.Errorf("remote vcda site with URL: %s was not found", apiURL)
+	}
+
+	return vcdaSite, nil
+}
+
+func (c *Client) getCloudSite(serviceCert string, apiURL string) (*CloudSite, error) {
+	reqURL, err := c.buildRequestURL("/sites")
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, *reqURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	vcdaSites := CloudSites{}
+	err = json.Unmarshal(body, &vcdaSites)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	var vcdaSite *CloudSite
+	for _, v := range vcdaSites {
+		if v.APIPublicURL == apiURL {
+			vcdaSite = &v
+			break
+		}
+	}
+
+	if vcdaSite == nil {
+		return nil, fmt.Errorf("remote vcda site with URL: %s was not found", apiURL)
+	}
+
+	return vcdaSite, nil
+}
