@@ -439,6 +439,41 @@ func (c *Client) setLookupService(lsURL string, lsThumbprint string, serviceCert
 	return nil
 }
 
+func (c *Client) setManagerLookupService(lsURL string, lsThumbprint string, ssoUser string, ssoPassword string, serviceCert string) error {
+	reqURL, err := c.buildRequestURL("config/lookup-service")
+
+	if err != nil {
+		return err
+	}
+
+	ssoAdminCred := SsoAdminCredentials{SsoUser: ssoUser, SsoPassword: ssoPassword}
+	reqData := ManagerLookupServiceData{URL: lsURL, Thumbprint: lsThumbprint, SsoAdminCredentials: ssoAdminCred}
+
+	rb, err := json.Marshal(reqData)
+	if err != nil {
+		return fmt.Errorf("could not marshal request data: %s", err)
+	}
+
+	req, err := http.NewRequest(http.MethodPost, *reqURL, strings.NewReader(string(rb)))
+	if err != nil {
+		return fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return err
+	}
+
+	lookupService := LookupService{}
+	err = json.Unmarshal(body, &lookupService)
+
+	if err != nil {
+		return fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	return nil
+}
+
 func (c *Client) setReplicatorLookupService(host string, lsURL string, lsThumbprint string, apiURL string, apiThumbprint string, rootPassword string, serviceCert string) (*LookupService, error) {
 	reqURL, err := c.BuildRequestURL(host, "/config/replicators/lookup-service")
 
@@ -511,8 +546,8 @@ func (c *Client) setVcloud(vcdUsername string, vcdPassword string, vcdURL string
 	return nil
 }
 
-func (c *Client) setTunnel(tunnelURL string, tunnelCertificate string, tunnelRootPassword string, serviceCert string) (*CloudSiteConfig, error) {
-	reqURL, err := c.buildRequestURL("/config/tunnel-service")
+func (c *Client) setTunnel(tunnelURL string, tunnelCertificate string, tunnelRootPassword string, serviceCert string) (*TunnelConfig, error) {
+	reqURL, err := c.buildRequestURL("/config/tunnels")
 
 	if err != nil {
 		return nil, err
@@ -535,7 +570,7 @@ func (c *Client) setTunnel(tunnelURL string, tunnelCertificate string, tunnelRoo
 		return nil, err
 	}
 
-	tunnelConfig := CloudSiteConfig{}
+	tunnelConfig := TunnelConfig{}
 	err = json.Unmarshal(body, &tunnelConfig)
 
 	if err != nil {
@@ -543,6 +578,44 @@ func (c *Client) setTunnel(tunnelURL string, tunnelCertificate string, tunnelRoo
 	}
 
 	return &tunnelConfig, nil
+}
+
+func (c *Client) getTunnelConfig(serviceCert string, tunnelID string) (*TunnelConfig, error) {
+	reqURL, err := c.buildRequestURL("/config/tunnels")
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, *reqURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	var tunnels Tunnels
+	err = json.Unmarshal(body, &tunnels)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	var tunnel *TunnelConfig
+	for _, r := range tunnels.Tunnels {
+		if r.ID == tunnelID {
+			tunnel = &r
+			break
+		}
+	}
+	if tunnel == nil {
+		return nil, fmt.Errorf("tunnel with ID: %s was not found", tunnelID)
+	}
+
+	return tunnel, nil
 }
 
 func (c *Client) getManagerSiteConfig(serviceCert string) (*SiteConfig, error) {
@@ -736,48 +809,41 @@ func (c *Client) deleteReplicator(host string, serviceCert string, replicatorID 
 	return nil
 }
 
-func (c *Client) setVspherePlugin(ssoUser string, ssoPassword string, serviceCert string) error {
-	reqURL, err := c.buildRequestURL("config/vsphere-ui/register")
+func (c *Client) setVspherePlugin(serviceCert string) (*VspherePluginStatus, error) {
+	reqURL, err := c.buildRequestURL("config/vsphere-ui")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	reqData := VspherePluginData{SsoUser: ssoUser, SsoPassword: ssoPassword}
-
-	rb, err := json.Marshal(reqData)
+	req, err := http.NewRequest(http.MethodPost, *reqURL, nil)
 	if err != nil {
-		return fmt.Errorf("could not marshal request data: %s", err)
+		return nil, fmt.Errorf("error creating new request: %s", err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, *reqURL, strings.NewReader(string(rb)))
+	body, err := c.doRequest(req, serviceCert)
 	if err != nil {
-		return fmt.Errorf("error creating new request: %s", err)
+		return nil, err
 	}
 
-	_, err = c.doRequest(req, serviceCert)
+	pluginStatus := VspherePluginStatus{}
+
+	err = json.Unmarshal(body, &pluginStatus)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
 	}
 
-	return nil
+	return &pluginStatus, nil
 }
 
-func (c *Client) removeVspherePlugin(ssoUser string, ssoPassword string, serviceCert string) error {
-	reqURL, err := c.buildRequestURL("config/vsphere-ui/unregister")
+func (c *Client) removeVspherePlugin(serviceCert string) error {
+	reqURL, err := c.buildRequestURL("config/vsphere-ui")
 
 	if err != nil {
 		return err
 	}
 
-	reqData := VspherePluginData{SsoUser: ssoUser, SsoPassword: ssoPassword}
-
-	rb, err := json.Marshal(reqData)
-	if err != nil {
-		return fmt.Errorf("could not marshal request data: %s", err)
-	}
-
-	req, err := http.NewRequest(http.MethodPost, *reqURL, strings.NewReader(string(rb)))
+	req, err := http.NewRequest(http.MethodDelete, *reqURL, nil)
 	if err != nil {
 		return fmt.Errorf("error creating new request: %s", err)
 	}

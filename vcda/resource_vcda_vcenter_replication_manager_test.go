@@ -33,10 +33,9 @@ func (at *AccTests) TestAccVcdaVcenterReplicationManager_basic(t *testing.T) {
 					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "expiration_date", "0"),
 					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site",
 						"ls_url", "https://"+os.Getenv(LookupServiceAddress)+":443/lookupservice/sdk"),
+					resource.TestCheckResourceAttr("vcda_vcenter_replication_manager.manager_site", "vsphere_plugin_status", "OK"),
 
 					resource.TestCheckResourceAttrSet("vcda_vcenter_replication_manager.manager_site", "ls_thumbprint"),
-					resource.TestCheckResourceAttrSet("vcda_vcenter_replication_manager.manager_site", "tunnel_url"),
-					resource.TestCheckResourceAttrSet("vcda_vcenter_replication_manager.manager_site", "tunnel_certificate"),
 				),
 			},
 		},

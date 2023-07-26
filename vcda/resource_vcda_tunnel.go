@@ -69,7 +69,7 @@ func resourceVcdaTunnelCreate(ctx context.Context, d *schema.ResourceData, m int
 		return diag.FromErr(err)
 	}
 
-	d.SetId(tunnelConfig.TunnelURL)
+	d.SetId(tunnelConfig.ID)
 
 	return resourceVcdaTunnelRead(ctx, d, m)
 }
@@ -80,12 +80,12 @@ func resourceVcdaTunnelRead(_ context.Context, d *schema.ResourceData, m interfa
 
 	serviceCert := d.Get("service_cert").(string)
 
-	site, err := c.getCloudSiteConfig(serviceCert)
+	tunnel, err := c.getTunnelConfig(serviceCert, d.Id())
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := setTunnelData(d, site); err != nil {
+	if err := setTunnelData(d, tunnel); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -108,7 +108,7 @@ func resourceVcdaTunnelUpdate(ctx context.Context, d *schema.ResourceData, m int
 			return diag.FromErr(err)
 		}
 
-		d.SetId(tunnelConfig.TunnelURL)
+		d.SetId(tunnelConfig.ID)
 
 		return resourceVcdaTunnelRead(ctx, d, m)
 	}
@@ -123,12 +123,12 @@ func resourceVcdaTunnelDelete(_ context.Context, d *schema.ResourceData, _ inter
 	return diags
 }
 
-func setTunnelData(d *schema.ResourceData, tunnelConfig *CloudSiteConfig) error {
-	if err := d.Set("tunnel_url", tunnelConfig.TunnelURL); err != nil {
+func setTunnelData(d *schema.ResourceData, tunnelConfig *TunnelConfig) error {
+	if err := d.Set("tunnel_url", tunnelConfig.URL); err != nil {
 		return fmt.Errorf("error setting tunnel_url field: %s", err)
 	}
 
-	if err := d.Set("tunnel_certificate", tunnelConfig.TunnelCertificate); err != nil {
+	if err := d.Set("tunnel_certificate", tunnelConfig.Certificate); err != nil {
 		return fmt.Errorf("error setting tunnel_certificate field: %s", err)
 	}
 

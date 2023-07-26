@@ -55,3 +55,4 @@ resource "vcda_vcenter_replication_manager" "manager_site" {
 - `site` (String) The site name of the vCenter Replication Manager.
 - `tunnel_certificate` (String) The certificate of the Tunnel Service.
 - `tunnel_url` (String) The URL of the Tunnel Service.
+- `vsphere_plugin_status` (String) The status of the Vsphere Plugin.

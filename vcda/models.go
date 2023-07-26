@@ -78,6 +78,17 @@ type LookupServiceData struct {
 	Thumbprint string `json:"thumbprint"`
 }
 
+type ManagerLookupServiceData struct {
+	URL                 string              `json:"url"`
+	Thumbprint          string              `json:"thumbprint"`
+	SsoAdminCredentials SsoAdminCredentials `json:"ssoAdminCredentials"`
+}
+
+type SsoAdminCredentials struct {
+	SsoUser     string `json:"ssoUser"`
+	SsoPassword string `json:"ssoPassword"`
+}
+
 type LookupService struct {
 	LsURL        string `json:"lsUrl"`
 	LsThumbprint string `json:"lsThumbprint"`
@@ -154,9 +165,18 @@ type TunnelData struct {
 	URL          string `json:"url"`
 }
 
-type VspherePluginData struct {
-	SsoUser     string `json:"ssoUser"`
-	SsoPassword string `json:"ssoPassword"`
+type Tunnels struct {
+	Tunnels []TunnelConfig `json:"tunnels"`
+}
+
+type TunnelConfig struct {
+	ID          string `json:"id"`
+	URL         string `json:"url"`
+	Certificate string `json:"certificate"`
+}
+
+type VspherePluginStatus struct {
+	Status string `json:"status"`
 }
 
 type IsServiceConfigured struct {

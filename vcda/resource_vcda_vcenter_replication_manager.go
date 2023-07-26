@@ -92,6 +92,11 @@ func resourceVcdaVcenterReplicationManager() *schema.Resource {
 				Description: "The certificate of the Tunnel Service.",
 				Computed:    true,
 			},
+			"vsphere_plugin_status": {
+				Type:        schema.TypeString,
+				Description: "The status of the Vsphere Plugin.",
+				Computed:    true,
+			},
 		},
 	}
 
@@ -125,12 +130,17 @@ func resourceVcenterReplicationManagerCreate(ctx context.Context, d *schema.Reso
 	}
 
 	// set manager lookup service
-	if err := c.setLookupService(lsURL, lsThumbprint, serviceCert); err != nil {
+	if err := c.setManagerLookupService(lsURL, lsThumbprint, ssoUser, ssoPassword, serviceCert); err != nil {
 		return diag.FromErr(err)
 	}
 
-	if err := c.setVspherePlugin(ssoUser, ssoPassword, serviceCert); err != nil {
+	pluginStatus, err := c.setVspherePlugin(serviceCert)
+	if err != nil {
 		return diag.FromErr(err)
+	}
+
+	if err := d.Set("vsphere_plugin_status", pluginStatus.Status); err != nil {
+		return diag.Errorf("error setting vsphere_plugin_status field: %s", err)
 	}
 
 	d.SetId(site.ID)
@@ -195,11 +205,9 @@ func resourceVcenterReplicationManagerDelete(_ context.Context, d *schema.Resour
 
 	c := m.(*Client)
 
-	ssoUser := d.Get("sso_user").(string)
-	ssoPassword := d.Get("sso_password").(string)
 	serviceCert := d.Get("service_cert").(string)
 
-	if err := c.removeVspherePlugin(ssoUser, ssoPassword, serviceCert); err != nil {
+	if err := c.removeVspherePlugin(serviceCert); err != nil {
 		return diag.FromErr(err)
 	}
 

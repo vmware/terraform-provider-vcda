@@ -10,7 +10,7 @@ const (
 	AcceptHeader        = "Accept"
 
 	ContentTypeHeaderValue = "application/json"
-	AcceptHeaderValue      = "application/vnd.vmware.h4-v4.5+json;charset=UTF-8"
+	AcceptHeaderValue      = "application/vnd.vmware.h4-v4.6+json;charset=UTF-8"
 	UserType               = "localUser"
 
 	ManagerCertExtraConfigKey    = "guestinfo.manager.certificate"
