@@ -210,7 +210,7 @@ func (c *Client) changePassword(host string, currentPassword string, newPassword
 }
 
 func (c *Client) checkPasswordExpired(host string, serviceCert string) (*PasswordExpiration, error) {
-	reqURL, err := c.BuildRequestURL(host, "/appliance/root-password-expired")
+	reqURL, err := c.BuildRequestURL(host, "/config/root-password-expired")
 
 	if err != nil {
 		return nil, err
