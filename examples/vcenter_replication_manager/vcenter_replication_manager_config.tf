@@ -221,3 +221,33 @@ resource "vcda_pair_site" "pair_site" {
 output "vcda_pair_site1" {
   value = vcda_pair_site.pair_site.*
 }
+
+// Manager Health info
+data "vcda_manager_health" "manager_health" {
+  depends_on   = [vcda_vcenter_replication_manager.manager_site]
+  service_cert = data.vcda_service_cert.manager_service_cert.id
+}
+
+output "vcda_manager_health" {
+  value = data.vcda_manager_health.manager_health.*
+}
+
+// Replicator Health info
+data "vcda_replicator_health" "replicator_health" {
+  service_cert  = data.vcda_service_cert.manager_service_cert.id
+  replicator_id = data.vcda_manager_health.manager_health.local_replicators_ids[0]
+}
+
+output "vcda_replicator_health" {
+  value = data.vcda_replicator_health.replicator_health.*
+}
+
+// Tunnel Health info
+data "vcda_tunnel_connectivity" "tunnel_connectivity" {
+  service_cert = data.vcda_service_cert.manager_service_cert.id
+  tunnel_id    = data.vcda_manager_health.manager_health.tunnels_ids[0]
+}
+
+output "vcda_tunnel_connectivity" {
+  value = data.vcda_tunnel_connectivity.tunnel_connectivity.*
+}

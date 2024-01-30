@@ -75,12 +75,16 @@ func TestRunner(t *testing.T) {
 		test.TestAccVcdaAppliancePassword_basic(t)
 		test.TestAccVcdaCloudDirectorReplicationManager_basic(t)
 		test.TestAccVcdaTunnel_basic(t)
+		test.TestAccVcdaDataSourceCloudHealth_basic(t)
 	})
 
 	t.Run("manager", func(t *testing.T) {
 		test := AccTests{Test: t}
 		test.TestAccVcdaVcenterReplicationManager_basic(t)
 		test.TestAccVcdaReplicator_basic(t)
+		test.TestAccVcdaDataSourceManagerHealth_basic(t)
+		test.TestAccVcdaDataSourceReplicatorHealth_basic(t)
+		test.TestAccVcdaDataSourceTunnelConnectivity_basic(t)
 	})
 
 	t.Run("pair", func(t *testing.T) {

@@ -74,6 +74,10 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"vcda_remote_services_thumbprint": dataSourceVcdaRemoteServicesThumbprint(),
 			"vcda_service_cert":               dataSourceVcdaServiceCert(),
+			"vcda_cloud_health":               dataSourceVcdaCloudHealth(),
+			"vcda_manager_health":             dataSourceVcdaManagerHealth(),
+			"vcda_replicator_health":          dataSourceVcdaReplicatorHealth(),
+			"vcda_tunnel_connectivity":        dataSourceVcdaTunnelConnectivity(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

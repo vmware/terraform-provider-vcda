@@ -306,3 +306,43 @@ resource "vcda_pair_site" "pair_cloud_site" {
 output "vcda_pair_cloud_site1" {
   value = vcda_pair_site.pair_cloud_site.*
 }
+
+// Cloud Health info
+data "vcda_cloud_health" "cloud_health" {
+  depends_on   = [vcda_cloud_director_replication_manager.cloud_site]
+  service_cert = data.vcda_service_cert.cloud_service_cert.id
+}
+
+output "vcda_cloud_health" {
+  value = data.vcda_cloud_health.cloud_health.*
+}
+
+// Manager Health info
+data "vcda_manager_health" "manager_health" {
+  service_cert = data.vcda_service_cert.cloud_service_cert.id
+  manager_id   = data.vcda_cloud_health.cloud_health.manager_id
+}
+
+output "vcda_manager_health" {
+  value = data.vcda_manager_health.manager_health.*
+}
+
+// Replicator Health info
+data "vcda_replicator_health" "replicator_health" {
+  service_cert  = data.vcda_service_cert.cloud_service_cert.id
+  replicator_id = data.vcda_manager_health.manager_health.local_replicators_ids[0]
+}
+
+output "vcda_replicator_health" {
+  value = data.vcda_replicator_health.replicator_health.*
+}
+
+// Tunnel Health info
+data "vcda_tunnel_connectivity" "tunnel_connectivity" {
+  service_cert = data.vcda_service_cert.cloud_service_cert.id
+  tunnel_id    = data.vcda_cloud_health.cloud_health.tunnels_ids[0]
+}
+
+output "vcda_tunnel_connectivity" {
+  value = data.vcda_tunnel_connectivity.tunnel_connectivity.*
+}

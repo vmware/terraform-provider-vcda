@@ -196,13 +196,6 @@ type PairVcenterSiteData struct {
 	Description   string `json:"description"`
 }
 
-type Tasks struct {
-	Items  []Task `json:"items"`
-	Total  int64  `json:"total"`
-	Offset int64  `json:"offset"`
-	Limit  int64  `json:"limit"`
-}
-
 type Task struct {
 	ID           string        `json:"id"`
 	User         string        `json:"user"`
@@ -213,33 +206,17 @@ type Task struct {
 	StartTime    int64         `json:"startTime"`
 	EndTime      int64         `json:"endTime"`
 	ResultType   string        `json:"resultType"`
-	Result       Result        `json:"result"`
+	Result       interface{}   `json:"result"`
 	Error        Error         `json:"error"`
 	Warnings     []interface{} `json:"warnings"`
 	Site         string        `json:"site"`
 }
 
-type Result struct {
-	Minor                interface{} `json:"minor"`
-	Major                interface{} `json:"major"`
-	ID                   *string     `json:"id,omitempty"`
-	Site                 *string     `json:"site,omitempty"`
-	Description          *string     `json:"description,omitempty"`
-	APIURL               *string     `json:"apiUrl,omitempty"`
-	APIPublicURL         *string     `json:"apiPublicUrl,omitempty"`
-	APIThumbprint        *string     `json:"apiThumbprint,omitempty"`
-	IsLocal              *bool       `json:"isLocal,omitempty"`
-	State                *State      `json:"state,omitempty"`
-	APIVersion           *string     `json:"apiVersion,omitempty"`
-	IsProviderDeployment *bool       `json:"isProviderDeployment,omitempty"`
-	PeerTunnelCERT       interface{} `json:"peerTunnelCert"`
-}
-
 type Error struct {
-	Code       string   `json:"code"`
-	Msg        string   `json:"msg"`
-	Args       []string `json:"args"`
-	Stacktrace string   `json:"stacktrace"`
+	Code       string        `json:"code"`
+	Msg        string        `json:"msg"`
+	Args       []interface{} `json:"args"`
+	Stacktrace string        `json:"stacktrace"`
 }
 
 type VcenterSites []VcenterSite

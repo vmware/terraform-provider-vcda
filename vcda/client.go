@@ -885,7 +885,7 @@ func (c *Client) isConfigured(serviceCert string) (*IsServiceConfigured, error) 
 }
 
 func (c *Client) getTask(serviceCert string, taskID string) (*Task, error) {
-	reqURL, err := c.buildRequestURL("/tasks")
+	reqURL, err := c.buildRequestURL("/tasks/" + taskID)
 
 	if err != nil {
 		return nil, err
@@ -896,30 +896,19 @@ func (c *Client) getTask(serviceCert string, taskID string) (*Task, error) {
 		return nil, fmt.Errorf("error creating new request: %s", err)
 	}
 
-	q := req.URL.Query()
-	q.Add("sort", "")
-	q.Add("offset", "0")
-	q.Add("limit", "100")
-	req.URL.RawQuery = q.Encode()
-
 	body, err := c.doRequest(req, serviceCert)
 	if err != nil {
 		return nil, err
 	}
 
-	tasks := Tasks{}
-	err = json.Unmarshal(body, &tasks)
+	task := Task{}
+	err = json.Unmarshal(body, &task)
 
 	if err != nil {
 		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
 	}
 
-	for _, task := range tasks.Items {
-		if task.ID == taskID {
-			return &task, nil
-		}
-	}
-	return nil, fmt.Errorf("Task %s not found", taskID)
+	return &task, nil
 }
 
 func (c *Client) pairSite(serviceCert string, apiThumbprint string, apiURL string, description string, site string) (*string, error) {
@@ -1107,4 +1096,34 @@ func (c *Client) getCloudSite(serviceCert string, apiURL string) (*CloudSite, er
 	}
 
 	return vcdaSite, nil
+}
+
+func (c *Client) getCloudHealth(serviceCert string) (*string, error) {
+	reqURL, err := c.buildRequestURL("diagnostics/health")
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, *reqURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating new request: %s", err)
+	}
+
+	body, err := c.doRequest(req, serviceCert)
+	if err != nil {
+		return nil, err
+	}
+
+	resBody := make(map[string]interface{})
+	err = json.Unmarshal(body, &resBody)
+	if err != nil {
+		return nil, fmt.Errorf("could not unmarshal response body: %s", err)
+	}
+
+	taskID, ok := resBody["id"].(string)
+	if !ok {
+		return nil, err
+	}
+
+	return &taskID, nil
 }
