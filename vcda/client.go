@@ -65,6 +65,7 @@ func (c *Client) DoRequest(host string, req *http.Request, serviceCert string) (
 	req.Header.Set(VcdaAuthTokenHeader, *authToken)
 	req.Header.Set(ContentTypeHeader, ContentTypeHeaderValue)
 	req.Header.Set(AcceptHeader, AcceptHeaderValue)
+	req.Header.Set(UserAgent, UserAgentValue)
 
 	hcl, err := c.NewHTTPClientConfig(serviceCert)
 	if err != nil {
@@ -136,6 +137,7 @@ func (c *Client) GetAuthToken(host string, password string, serviceCert string) 
 	req, err := http.NewRequest(http.MethodPost, *reqURL, strings.NewReader(string(rb)))
 	req.Header.Set(ContentTypeHeader, ContentTypeHeaderValue)
 	req.Header.Set(AcceptHeader, AcceptHeaderValue)
+	req.Header.Set(UserAgent, UserAgentValue)
 
 	if err != nil {
 		return nil, err
@@ -183,6 +185,7 @@ func (c *Client) changePassword(host string, currentPassword string, newPassword
 	req.Header.Set(VcdaAuthTokenHeader, *token)
 	req.Header.Set(ContentTypeHeader, ContentTypeHeaderValue)
 	req.Header.Set(AcceptHeader, AcceptHeaderValue)
+	req.Header.Set(UserAgent, UserAgentValue)
 	req.Header.Set(ConfigSecretHeader, currentPassword)
 
 	hcl, err := c.NewHTTPClientConfig(serviceCert)

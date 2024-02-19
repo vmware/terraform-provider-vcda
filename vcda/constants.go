@@ -1,5 +1,4 @@
-/* Copyright 2023 VMware, Inc.
-   SPDX-License-Identifier: MPL-2.0 */
+/* Copyright 2023 VMware, Inc. */
 
 package vcda
 
@@ -8,10 +7,13 @@ const (
 	ContentTypeHeader   = "Content-Type"
 	ConfigSecretHeader  = "Config-Secret"
 	AcceptHeader        = "Accept"
+	UserAgent           = "User-Agent"
 
+	APIVersion             = "h4-v4.7"
 	ContentTypeHeaderValue = "application/json"
-	AcceptHeaderValue      = "application/vnd.vmware.h4-v4.7+json;charset=UTF-8"
+	AcceptHeaderValue      = "application/vnd.vmware." + APIVersion + "+json;charset=UTF-8"
 	UserType               = "localUser"
+	UserAgentValue         = "vcda-terraform-provider/" + APIVersion
 
 	ManagerCertExtraConfigKey    = "guestinfo.manager.certificate"
 	CloudCertExtraConfigKey      = "guestinfo.cloud.certificate"
