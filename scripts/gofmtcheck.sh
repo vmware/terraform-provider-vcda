@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Copyright (c) 2023-2024 Broadcom. All Rights Reserved.
+# Broadcom Confidential. The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# SPDX-License-Identifier: MPL-2.0
 
 # Check gofmt
 echo "==> Checking that code complies with gofmt requirements..."

@@ -1,4 +1,7 @@
-/* Copyright 2023 VMware, Inc. */
+// Copyright (c) 2023-2024 Broadcom. All Rights Reserved.
+// Broadcom Confidential. The term "Broadcom" refers to Broadcom Inc.
+// and/or its subsidiaries.
+// SPDX-License-Identifier: MPL-2.0
 
 package vcda
 
