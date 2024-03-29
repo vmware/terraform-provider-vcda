@@ -202,7 +202,7 @@ func dataSourceVcdaCloudHealth() *schema.Resource {
 			},
 			"tunnels_ids": {
 				Type:        schema.TypeList,
-				Description: "A list of the tunnels IDs of the Cloud Director/vCenter Replication Manager Service.",
+				Description: "A list of the tunnels IDs of the Cloud Director Replication Manager Service.",
 				Computed:    true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,

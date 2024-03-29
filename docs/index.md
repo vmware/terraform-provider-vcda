@@ -20,6 +20,8 @@ Replicator Service instances and configuring the Tunnel Service.
 Since VCDA Terraform Provider v2.0.0, the provider supports one-step pairing of either a Cloud Director Replication Management Appliance to an already configured
 Cloud Director Replication Management Appliance, or vCenter Replication Management Appliance to an already configured vCenter Replication Management Appliance.
 
+Since VCDA Terraform Provider v2.1.0, the provider supports recently released VMware Cloud Director Availability v.4.7.1 and new health info data sources of the core services.
+
 Note: The provider must be configured with the correct credentials and inputs before it can be used.
 
 * For more information,
@@ -36,6 +38,10 @@ The VCDA Terraform provider v1.0.0 supports the following versions of VMware Clo
 
 The VCDA Terraform provider v2.0.0 supports the following versions of VMware Cloud Director Availability:
 * [Version 4.6](https://docs.vmware.com/en/VMware-Cloud-Director-Availability/4.6/rn/vmware-cloud-director-availability-46-release-notes/index.html)
+
+The VCDA Terraform provider v2.1.0 supports the following versions of VMware Cloud Director Availability:
+* [Version 4.6](https://docs.vmware.com/en/VMware-Cloud-Director-Availability/4.6/rn/vmware-cloud-director-availability-46-release-notes/index.html)
+* [Version 4.7](https://docs.vmware.com/en/VMware-Cloud-Director-Availability/4.7.1/rn/vmware-cloud-director-availability-471-release-notes/index.html)
 
 ## Example Usage
 
