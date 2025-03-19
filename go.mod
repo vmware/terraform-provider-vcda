@@ -1,6 +1,8 @@
 module terraform-provider-for-vmware-cloud-director-availability
 
-go 1.19
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
