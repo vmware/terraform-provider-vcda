@@ -1,5 +1,10 @@
 # Terraform provider for VMware Cloud Director Availability
 
+> **_NOTE:_** **VMware by Broadcom has ended the active development of this Terraform Provider, so this repository will no longer be updated**.
+
+- Website: [https://www.terraform.io](https://registry.terraform.io/providers/vmware/vcda/latest)
+- Documentation: [https://registry.terraform.io/providers/vmware/vcda/latest/docs](https://registry.terraform.io/providers/vmware/vcda/latest/docs)
+
 The official Terraform provider
 for [VMware Cloud Director Availability](https://www.vmware.com/products/cloud-director-availability.html).
 
@@ -17,7 +22,7 @@ Cloud Director Replication Management Appliance, or vCenter Replication Manageme
 
 * For information about the Terraform provider, see the [provider documentation](https://registry.terraform.io/providers/vmware/vcda/latest/docs).
 * For information about VMware Cloud Director Availability,
-  see the [ Product Page](https://www.vmware.com/products/cloud-director-availability.html).
+  see the [ Product Page](https://www.vmware.com/products/cloud-infrastructure/cloud-director-availability).
 * For more information,
   see the [VMware Cloud Director Availability Documentation](https://docs.vmware.com/en/VMware-Cloud-Director-Availability/index.html).
 
